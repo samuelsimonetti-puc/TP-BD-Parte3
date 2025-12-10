@@ -34,25 +34,11 @@ Certifique-se de que o banco de dados **ProjetoBD** existe no PostgreSQL com tod
 
 Após criar as tabelas, execute o arquivo `seed.sql` para inserir os dados iniciais:
 
-```bash
-psql -U postgres -d ProjetoBD -f seed.sql
-```
-
-Ou através de uma ferramenta como pgAdmin, abra e execute o conteúdo do arquivo `seed.sql`.
-
 ## Configuração do Ambiente
 
 ### 1. Variáveis de Ambiente
 
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=sua_senha_aqui
-DB_NAME=ProjetoBD
-```
+Crie um arquivo `.env` na raiz do projeto seguindo o template `.env.template`
 
 ### 2. Instalar Dependências
 
