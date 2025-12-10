@@ -20,8 +20,8 @@ export default function Aptidoes() {
   const carregarDados = async () => {
     try {
       const [discsResp, minhasResp] = await Promise.all([
-        fetch("/disciplinas", { credentials: "include" }),
-        fetch("/me/aptidoes", { credentials: "include" }),
+        fetch("/api/disciplinas", { credentials: "include" }),
+        fetch("/api/me/aptidoes", { credentials: "include" }),
       ]);
 
       if (discsResp.status === 401 || minhasResp.status === 401) {
@@ -61,7 +61,7 @@ export default function Aptidoes() {
     setSucesso("");
 
     try {
-      const resp = await fetch("/me/aptidoes", {
+      const resp = await fetch("/api/me/aptidoes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -82,7 +82,7 @@ export default function Aptidoes() {
   };
 
   const handleLogout = async () => {
-    await fetch("/logout", {
+    await fetch("/api/logout", {
       method: "POST",
       credentials: "include",
     });

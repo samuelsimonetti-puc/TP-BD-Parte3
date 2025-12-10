@@ -22,7 +22,6 @@ app.use(
 );
 app.use(express.static("public"));
 
-// Middleware para proteger rotas
 function requireAuth(req, res, next) {
   if (!req.session.user) {
     return res.status(401).json({ error: "Nao autenticado" });
@@ -30,8 +29,7 @@ function requireAuth(req, res, next) {
   next();
 }
 
-// Login
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { email, senha } = req.body;
 
   const result = await db.query(
@@ -49,23 +47,20 @@ app.post("/login", async (req, res) => {
   res.json({ user: result.rows[0] });
 });
 
-// Logout
-app.post("/logout", (req, res) => {
+app.post("/api/logout", (req, res) => {
   req.session.destroy(() => {
     res.json({ ok: true });
   });
 });
 
-// Listar todas as disciplinas
-app.get("/disciplinas", requireAuth, async (req, res) => {
+app.get("/api/disciplinas", requireAuth, async (req, res) => {
   const result = await db.query(
     "SELECT IdDisciplina, NomeDisciplina, Codigo FROM DISCIPLINA ORDER BY NomeDisciplina"
   );
   res.json(result.rows);
 });
 
-// Listar disciplinas que o professor logado pode ministrar
-app.get("/me/aptidoes", requireAuth, async (req, res) => {
+app.get("/api/me/aptidoes", requireAuth, async (req, res) => {
   const { idprofessor } = req.session.user;
 
   const result = await db.query(
@@ -77,10 +72,9 @@ app.get("/me/aptidoes", requireAuth, async (req, res) => {
   res.json(result.rows.map((r) => r.idDisciplina));
 });
 
-// Atualizar aptidoes do professor logado
-app.post("/me/aptidoes", requireAuth, async (req, res) => {
+app.post("/api/me/aptidoes", requireAuth, async (req, res) => {
   const { idprofessor, idusuario } = req.session.user;
-  const { disciplinas } = req.body; // array de ids
+  const { disciplinas } = req.body;
 
   await db.query(
     `DELETE FROM PODE_MINISTRAR
@@ -103,7 +97,7 @@ app.post("/me/aptidoes", requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-app.get("/alocacoes", requireAuth, async (req, res) => {
+app.get("/api/alocacoes", requireAuth, async (req, res) => {
   const result = await db.query(`
     SELECT
       up.Nome AS professor,
@@ -113,7 +107,7 @@ app.get("/alocacoes", requireAuth, async (req, res) => {
       h.HoraFim AS horafim,
       s.NumeroSala AS numerosala,
       p.NomePredio AS nomepredio
-    FROM ALOCACAO_POSSUI_USUARIO_PROFESSOR_DISCIPLINA_SEMESTRE_LETIVO_HORARIO_SALA a
+    FROM ALOCACAO a
     JOIN USUARIO_PROFESSOR up
       ON up.IdUsuario = a.FK_USUARIO_PROFESSOR_IdUsuario
      AND up.IdProfessor = a.FK_USUARIO_PROFESSOR_IdProfessor

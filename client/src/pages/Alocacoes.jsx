@@ -16,7 +16,7 @@ export default function Alocacoes() {
 
   const carregarAlocacoes = async () => {
     try {
-      const resp = await fetch("/alocacoes", {
+      const resp = await fetch("/api/alocacoes", {
         credentials: "include",
       });
 
@@ -35,7 +35,7 @@ export default function Alocacoes() {
   };
 
   const handleLogout = async () => {
-    await fetch("/logout", {
+    await fetch("/api/logout", {
       method: "POST",
       credentials: "include",
     });
